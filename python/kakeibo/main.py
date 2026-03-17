@@ -1,21 +1,27 @@
-from expense import add_expense, show_expenses
+import tkinter
+import ui.registration
 
-while True:
+root = tkinter.Tk()
+root.title("家計簿アプリ")
+root.geometry("900x600")
+root.configure(bg="#f0f0f0")
 
-    print("1 追加")
-    print("2 表示")
-    print("3 終了")
+expenses = ["日付 : ", "商品 : ", "値段 : "]
 
-    choice = input("選択: ")
+def create_registration_card():
+    # ヘッダー
+    header = tkinter.Frame(root, bg="#2f6fbd", height=120)
+    header.pack(fill="x")
+    ui.registration.create_header(header)
 
-    if choice == "1":
-        date = input("日付: ")
-        item = input("項目: ")
-        price = int(input("金額: "))
-        add_expense(date, item, price)
+    # メインエリア
+    main = tkinter.Frame(root, bg="#f0f0f0")
+    main.pack(fill="both", expand=True, padx=30, pady=20)
 
-    elif choice == "2":
-        show_expenses()
+    # カード作成
+    ui.registration.registration_data(main, expenses)
 
-    elif choice == "3":
-        break
+
+
+create_registration_card
+root.mainloop()
