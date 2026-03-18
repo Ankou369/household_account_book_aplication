@@ -18,7 +18,22 @@ def show_expenses():
     conn = get_connection()
     cur = conn.cursor()
 
-    for row in cur.execute("SELECT * FROM expenses"):
-        print(row)
+    expenses_data = []
 
+    for row in cur.execute("SELECT * FROM expenses"):
+        expenses_data.append(row)
+
+    conn.close()
+    return expenses_data
+
+def delete_expense(expense_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "DELETE FROM expenses WHERE id = ?",
+        (expense_id,)
+    )
+
+    conn.commit()
     conn.close()

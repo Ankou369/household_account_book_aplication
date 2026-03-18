@@ -1,21 +1,6 @@
 import tkinter
 import datetime
-from db.expense  import add_expense, show_expenses
-
-def create_header(header):
-    title = tkinter.Label(header,
-                        text="家計簿アプリ",
-                        font=("Noto Sans JP", 24, "bold"),
-                        bg="#2f6fbd",
-                        fg="white")
-    title.pack(pady=(30,5))
-
-    subtitle = tkinter.Label(header,
-                        text="支出管理ページ",
-                        font=("Noto Sans JP", 12),
-                        bg="#2f6fbd",
-                        fg="white")
-    subtitle.pack()
+import db.expense
 
 def registration_data(parent, expenses):
     card = tkinter.Frame(parent, bg = "#e5e5e5", bd = 0)
@@ -27,6 +12,13 @@ def registration_data(parent, expenses):
         font = ("Noto Sans JP", 16, "bold"),
     )
     title_label.pack(anchor="center", padx = 20, pady = 10)
+
+    def validate_date(date_str):
+        try:
+            return datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return None
+        
 
     entries = {}
     for expense in expenses:
@@ -60,11 +52,12 @@ def registration_data(parent, expenses):
         entries[expense] = entry
 
     def on_click():
-        date = entries["日付 : "].get()
+        date_str = entries["日付 : "].get()
         item = entries["商品 : "].get()
         price = int(entries["値段 : "].get())
+        date = validate_date(date_str)
 
-        add_expense(date, item, price)
+        db.expense.add_expense(date, item, price)
 
     button = tkinter.Button(
             card, 
